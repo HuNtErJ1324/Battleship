@@ -16,7 +16,7 @@ public class Client {
         Scanner input = new Scanner(System.in);
         System.out.print("Type your name here: ");
         Player player1 = new Player(input.nextLine());
-        Player bot = new Player("bot");
+        Bot bot = new Bot("bot");
         Game g = new Game("Battleship", player1, bot);
         g.start();
     }
