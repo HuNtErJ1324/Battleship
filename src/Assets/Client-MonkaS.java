@@ -22,14 +22,11 @@ public class Client {
             Bot bot = new Bot("bot");
             Game g = new Game("Battleship", player1, bot);
             g.start();
-        }
-        else{
+        } else {
             Game g = Game.load();
             g.recommence();
         }
-
     }
 }
-// git add .
-//git commit -m "message"
-//git push
+//sample ship position sequence:
+//A0 S J9 N D5 W F4 E J0 E

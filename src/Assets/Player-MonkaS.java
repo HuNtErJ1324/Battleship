@@ -5,56 +5,61 @@
  */
 package Assets;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
  * @author peanu
  */
-public class Bot extends Player {
+public class Player implements Serializable {
 
-    public Bot(String name) {
-        super(name);
+    private Board board;
+    private String name;
+    ArrayList<String> moves = new ArrayList();
+
+    public Player(String name) {
+        this.name = name;
+        board = new Board();
     }
 
-    //overide set ship position
-    @Override
     public void setShipPos() {
-        ArrayList<Ship> ships = super.getBoard().getShips();
+        Scanner input = new Scanner(System.in);
+        ArrayList<Ship> ships = board.getShips();
+        String position;
+        char direction;
         for (int i = 0; i < ships.size(); i++) {
-            String position = "";
-            char direction = 'N';
-            do {
-                position = ((char) ((int) (Math.random() * 10) + 65)) + "" + ((int) (Math.random() * 10));
-                direction = randomDirection();
-            } while (!isValidPosition(position, direction, ships.get(i).getLength()));
-            ships.get(i).setDirection(direction);
+            System.out.print(ships.get(i).getName() + " position(eg. A1): ");
+            position = input.next().toUpperCase();
             ships.get(i).setPosition(position);
-            super.getBoard().drawShips();
-            //System.out.println(super.getBoard());
+            System.out.print(ships.get(i).getName() + " direction(eg. N, E, S, W): ");
+            direction = Character.toUpperCase(input.next().charAt(0));
+            ships.get(i).setDirection(direction);
+            while (!isValidPosition(position, direction, ships.get(i).getLength())) {
+                System.out.print("Invalid position!\nRe-enter " + ships.get(i).getName() + " position:");
+                position = input.next().toUpperCase();
+                ships.get(i).setPosition(position);
+                System.out.print(ships.get(i).getName() + " direction(eg. N, E, S, W): ");
+                direction = Character.toUpperCase(input.next().charAt(0));
+                ships.get(i).setDirection(direction);
+            }
+            board.drawShips();
+            System.out.println(board);
         }
     }
 
-    //overide get move
-    @Override
-    public String getMove() {
-        return ((char) ((int) (Math.random() * 10) + 65)) + "" + ((int) (Math.random() * 10));
-    }
-
-    private char randomDirection() {
-        int rand = (int) (Math.random() * (4));
-        if (rand == 0) {
-            return 'N';
-        } else if (rand == 1) {
-            return 'E';
-        } else if (rand == 2) {
-            return 'S';
-        } else {
-            return 'W';
+    public boolean isValidMove(String move) {
+        for (int i = 0; i < moves.size(); i++) {
+            if (moves.get(i).equals(move)) {
+                return false;
+            }
         }
+        moves.add(move);
+        return true;
     }
 
-    private boolean isValidPosition(String position, char direction, int length) {
+    public boolean isValidPosition(String position, char direction, int length) {
         //check if it is inside the board
         if (direction == 'N' && position.charAt(0) - length < 'A') {
             return false;
@@ -108,5 +113,43 @@ public class Bot extends Player {
             }
         }
         return true;
+    }
+
+    public void updateTopBoard(String position, boolean hit) {
+        board.updateTopBoard(position, hit);
+    }
+
+    public boolean firedUpon(String move) {
+        String result = board.potentialHit(move);
+        System.out.println(result);
+        //if statement but cooler
+        return !result.equals("Shot missed");
+    }
+
+    public boolean gameOver() {
+        if (board.allDead()) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getMove() {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Shot position: ");
+        String move = input.next();
+
+        return move;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<String> getMoves() {
+        return moves;
     }
 }

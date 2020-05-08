@@ -23,8 +23,8 @@ public class Player {
         board = new Board();
     }
 
-    public void updateTopBoard(String location, boolean hit) {
-        board.updateTopBoard(location, hit);
+    public void updateTopBoard(String position, boolean hit) {
+        board.updateTopBoard(position, hit);
     }
 
     public boolean firedUpon(String move) {
@@ -45,9 +45,9 @@ public class Player {
         Scanner input = new Scanner(System.in);
         ArrayList<Ship> ships = board.getShips();
         for (int i = 0; i < ships.size(); i++) {
-            System.out.print(ships.get(i).getName() + " location(eg. A1): ");
-            String location = input.next();
-            ships.get(i).setLocation(location);
+            System.out.print(ships.get(i).getName() + " position(eg. A1): ");
+            String position = input.next();
+            ships.get(i).setPosition(position);
             System.out.print(ships.get(i).getName() + " direction(eg. N, E, S, W): ");
             char direction = input.next().charAt(0);
             ships.get(i).setDirection(direction);
@@ -58,7 +58,7 @@ public class Player {
     
     public String getMove(){
         Scanner input = new Scanner(System.in);
-        System.out.print("Shot location: ");
+        System.out.print("Shot position: ");
         String move = input.next();
         return move;
     }
