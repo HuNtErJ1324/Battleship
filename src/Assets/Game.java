@@ -7,6 +7,7 @@ package Assets;
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -33,8 +34,10 @@ public class Game implements Serializable {
         bot.setShipPos();
         //if statement player 1 turn
         if (Math.random() < 0.5) {
+            String move;
             System.out.println(player1.getName() + "'s move");
-            String move = player1.getMove();
+            move = player1.getMove();
+            player1.getMoves().add(move);
             if (move.equalsIgnoreCase("Save")) {
                 save();
                 return;
@@ -45,19 +48,39 @@ public class Game implements Serializable {
         while (!bot.gameOver()) {
             //player 2 turn
             String move = bot.getMove();
+            while (!bot.isValidMove(move)) {
+                move = bot.getMove();
+            }
+            for (int i = 0; i < 3; i++) {
+                System.out.print(".");
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException ex) {
+                    System.out.println("AAAHHHH");
+                }
+            }
+            System.out.println("");
             System.out.println(bot.getName() + " move: " + move);
             bot.updateTopBoard(move, player1.firedUpon(move));
-
+            System.out.print(player1.getBoard());
             //if statement is game over
             if (player1.gameOver()) {
                 break;
             }
             //player 1 turn
-            System.out.println(player1.getName() + " move");
+            System.out.println(player1.getName() + ", enter a move:");
             move = player1.getMove();
-            if (move.equalsIgnoreCase("Save")) {
+            if (move.equalsIgnoreCase("save")) {
                 save();
-                break;
+                return;
+            }
+            while (!player1.isValidMove(move)) {
+                System.out.println(player1.getName() + ", You already did that!\nEnter a new move:");
+                move = player1.getMove();
+                if (move.equalsIgnoreCase("save")) {
+                    save();
+                    return;
+                }
             }
             player1.updateTopBoard(move, bot.firedUpon(move));
             System.out.print(player1.getBoard());
@@ -74,11 +97,20 @@ public class Game implements Serializable {
     public void recommence() {
         while (!player1.gameOver()) {
             //player 1 turn
-            System.out.println(player1.getName() + " move");
+            System.out.println(player1.getName() + ", enter a move:");
             String move = player1.getMove();
-            if (move.equalsIgnoreCase("Save")) {
+            if (move.equalsIgnoreCase("save")) {
                 save();
-                break;
+                return;
+            }
+            while (!player1.isValidMove(move)) {
+                System.out.println(player1.getName() + ", You already did that!\nEnter a new move:");
+                move = player1.getMove();
+                if (move.equalsIgnoreCase("save")) {
+                    save();
+                    return;
+                }
+
             }
             player1.updateTopBoard(move, bot.firedUpon(move));
             System.out.print(player1.getBoard());
@@ -88,6 +120,15 @@ public class Game implements Serializable {
             }
             //player 2 turn
             move = bot.getMove();
+            for (int i = 0; i < 3; i++) {
+                System.out.print(".");
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException ex) {
+                    System.out.println("AAAHHHH");
+                }
+            }
+            System.out.println("");
             System.out.println(bot.getName() + " move: " + move);
             bot.updateTopBoard(move, player1.firedUpon(move));
         }
@@ -102,10 +143,9 @@ public class Game implements Serializable {
 //credit to: geeksforgeeks.org/serialization-in-java/
 
     public void save() {
-
         try {
             //Saving of object in a file 
-            FileOutputStream file = new FileOutputStream("src/Assets/" + name + ".txt");
+            FileOutputStream file = new FileOutputStream(name + ".ser");
             ObjectOutputStream out = new ObjectOutputStream(file);
             // Method for serialization of object 
             out.writeObject(this);
@@ -123,7 +163,7 @@ public class Game implements Serializable {
             // Reading the object from a file 
             Scanner input = new Scanner(System.in);
             System.out.print("Game name: ");
-            FileInputStream file = new FileInputStream("src/Assets/" + input.next() + ".txt");
+            FileInputStream file = new FileInputStream(input.next() + ".ser");
             ObjectInputStream in = new ObjectInputStream(file);
             // Method for deserialization of object 
             game = (Game) in.readObject();
@@ -137,5 +177,8 @@ public class Game implements Serializable {
         }
         return game;
     }
-}
 
+    public String getName() {
+        return name;
+    }
+}
