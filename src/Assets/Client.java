@@ -30,6 +30,7 @@ public class Client {
 
     }
 }
-// git add .
-//git commit -m "message"
-//git push
+//sample ship position sequence
+//A0 S J9 N D5 W F4 E J0 E
+//nullpointerexception for incorrect input at start/continue
+//arrayindexoutofboundsexception for incorrect move input

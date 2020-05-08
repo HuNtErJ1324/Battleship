@@ -5,11 +5,13 @@
  */
 package Assets;
 
+import java.io.Serializable;
+
 /**
  *
  * @author peanu
  */
-public class Ship {
+public class Ship implements Serializable{
     private int length;
     private String position;
     private char direction;

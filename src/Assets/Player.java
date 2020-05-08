@@ -136,8 +136,7 @@ public class Player implements Serializable {
     public String getMove() {
         Scanner input = new Scanner(System.in);
         System.out.print("Shot position: ");
-        String move = input.next();
-
+        String move = input.next().toUpperCase();
         return move;
     }
 

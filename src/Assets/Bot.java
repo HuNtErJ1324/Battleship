@@ -21,6 +21,7 @@ public class Bot extends Player {
     @Override
     public void setShipPos() {
         ArrayList<Ship> ships = super.getBoard().getShips();
+        
         for (int i = 0; i < ships.size(); i++) {
             String position = "";
             char direction = 'N';
@@ -33,6 +34,8 @@ public class Bot extends Player {
             super.getBoard().drawShips();
             //System.out.println(super.getBoard());
         }
+        
+        
     }
 
     @Override
