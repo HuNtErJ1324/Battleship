@@ -37,6 +37,10 @@ public class Game implements Serializable {
             String move;
             System.out.println(player1.getName() + "'s move");
             move = player1.getMove();
+            while(!Player.isClean(move)){
+                System.out.println("Invalid move!");
+                move = player1.getMove();
+            }
             player1.getMoves().add(move);
             if (move.equalsIgnoreCase("Save")) {
                 save();
@@ -70,6 +74,10 @@ public class Game implements Serializable {
             //player 1 turn
             System.out.println(player1.getName() + ", enter a move:");
             move = player1.getMove();
+            while(!Player.isClean(move)){
+                System.out.println("Invalid move!");
+                move = player1.getMove();
+            }
             if (move.equalsIgnoreCase("save")) {
                 save();
                 return;
@@ -95,10 +103,15 @@ public class Game implements Serializable {
     }
 
     public void recommence() {
+        System.out.println(player1.getBoard());
         while (!player1.gameOver()) {
             //player 1 turn
             System.out.println(player1.getName() + ", enter a move:");
             String move = player1.getMove();
+            while(!Player.isClean(move)){
+                System.out.println("Invalid move!");
+                move = player1.getMove();
+            }
             if (move.equalsIgnoreCase("save")) {
                 save();
                 return;
@@ -151,7 +164,7 @@ public class Game implements Serializable {
             out.writeObject(this);
             out.close();
             file.close();
-            System.out.println("Object has been serialized");
+            System.out.println("Game has been saved!!!");
         } catch (IOException ex) {
             System.out.println("IOException is caught");
         }
@@ -169,7 +182,7 @@ public class Game implements Serializable {
             game = (Game) in.readObject();
             in.close();
             file.close();
-            System.out.println("Object has been deserialized ");
+            System.out.println("Game has been loaded!!!");
         } catch (IOException ex) {
             System.out.println("IOException is caught");
         } catch (ClassNotFoundException ex) {

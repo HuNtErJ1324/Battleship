@@ -48,6 +48,22 @@ public class Player implements Serializable {
             System.out.println(board);
         }
     }
+    
+    public static boolean isClean(String move){
+        if(move.length() != 2 ){
+            if (move.equalsIgnoreCase("save")) {
+                return true;
+            }
+            return false;
+        }
+        if (move.charAt(0) < 'A' || move.charAt(0) > 'J') {
+            return false;
+        } 
+        else if (move.charAt(1) > '9'|| move.charAt(1) < '0') {
+            return false;
+        }
+        return true;
+    }
 
     public boolean isValidMove(String move) {
         for (int i = 0; i < moves.size(); i++) {
